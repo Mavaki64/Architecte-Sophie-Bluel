@@ -15,6 +15,10 @@ export async function getCategories(apiBaseUrl) {
     return categories;
 }
 
+/**
+ * Affiche les catégories dans le filtre en créant les éléments HTML
+ * @param {Array<Object>} categories - Un tableau d'objets représentant les catégories à afficher
+ */
 export function displayCategories(categories) {
     const filtersContainer = document.querySelector(".filter");
     filtersContainer.innerHTML = "";
