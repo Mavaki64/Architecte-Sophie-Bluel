@@ -39,3 +39,26 @@ export function displayCategories(categories) {
     filterElement.dataset.filterId = 0;
     filtersContainer.prepend(filterElement);
 }
+
+/**
+ * Filtre les projets par catégorie
+ * @param {Object} clickedBtn - L'élément HTML du bouton cliqué
+ * @param {Array<Object>} projects - Un tableau d'objets représentant les projets
+ * @returns {Array<Object>} Un tableau d'objets représentant les projets filtrés ou tous les projets si la catégorie est 0
+ */
+export function filterByCategory(clickedBtn, projects) {
+    const filterElement = document.querySelectorAll(".filter-item");
+    filterElement.forEach(element => {
+        element.classList.remove("active");
+    });
+    clickedBtn.classList.add("active");
+    const categoryId = clickedBtn.dataset.filterId;
+
+    if(categoryId == 0){
+        return projects;
+    }
+    else{
+        const filteredProjects = projects.filter((project) => project.categoryId == categoryId);
+        return filteredProjects;
+    }
+}
