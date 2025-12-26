@@ -42,8 +42,7 @@ export function displayProjects(projects){
         imageElement.src = project.imageUrl;
         imageElement.alt = project.title;
         figcaptionElement.innerText = project.title;
-        figureElement.appendChild(imageElement);
-        figureElement.appendChild(figcaptionElement);
-        gallery.appendChild(figureElement);
+        figureElement.append(imageElement, figcaptionElement);
+        gallery.append(figureElement);
     }
 }
