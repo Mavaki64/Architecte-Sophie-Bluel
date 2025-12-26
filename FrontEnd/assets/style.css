@@ -121,9 +121,47 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
+#portfolio{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 50px;
+}
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
+}
+.filter{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	max-width: 585px;
+}
+.filter-item{
+	font-family: 'Syne', sans-serif;
+	text-decoration: none;
+	color: #1D6154;
+	font-size: 16px;
+	font-weight: 700;
+	text-align: center;
+	border: 1px #1D6154 solid;
+	border-radius: 60px;
+	padding: 9px 0 9px 0;
+	width: 100px;
+	box-sizing: border-box;
+	text-wrap: nowrap;
+}
+.filter-item:nth-child(3){
+	width: 157px;
+}
+.filter-item:nth-child(4){
+	width: 198px;
+}
+.filter-item.active{
+	background-color: #1D6154;
+	color: white;
 }
 .gallery {
 	width: 100%;
