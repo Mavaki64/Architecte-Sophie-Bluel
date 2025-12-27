@@ -3,6 +3,7 @@ import { displayCategories, getCategories, filterByCategory } from "./filters.js
 
 const apiBaseUrl = `http://localhost:5678/api/`;
 const filterContainer = document.querySelector(".filter");
+const loginBtn = document.querySelector(".login");
 let projects;
 let categories;
 
@@ -23,4 +24,8 @@ filterContainer.addEventListener('click', (event) => {
         const filteredProjects = filterByCategory(clickedBtn, projects);
         displayProjects(filteredProjects);
     }
+});
+
+loginBtn.addEventListener('click', () => {
+    window.location = "./login.html"
 });

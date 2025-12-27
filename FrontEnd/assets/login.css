@@ -1,0 +1,33 @@
+#login {
+	width: 50%;
+    margin: auto;
+}
+#login > * {
+	text-align: center;
+    color: #3d3d3d;
+}
+#login h2{
+    margin-top: 150px;
+	margin-bottom: 7px;
+}
+#login form {
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+}
+#login input {
+	height: 51px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+#login label {
+	margin: 30px 0 6px 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+#login a {
+    text-align: center;
+    width: 100%;
+    display: block;
+}
