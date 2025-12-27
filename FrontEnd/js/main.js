@@ -6,6 +6,10 @@ import { toggleElementForLoggedUser, isLogged } from "./edit.js";
 const apiBaseUrl = `http://localhost:5678/api/`;
 const filterContainer = document.querySelector(".filter");
 const loginBtn = document.querySelector(".login");
+const portfolioHeader = document.querySelector(".portfolio-header");
+const modal = document.querySelector("#modal");
+const modalBackdrop = document.querySelector("#modal::backdrop");
+const modalCloseBtn = document.querySelector(".modal-close-btn");
 let projects;
 let categories;
 
@@ -52,4 +56,21 @@ loginBtn.addEventListener('click', async () => {
         const userIsLogged = isLogged();
         toggleElementForLoggedUser(userIsLogged, categories);
     }
+});
+
+portfolioHeader.addEventListener("click", (event) => {
+    if(event.target.closest(".edit-btn") || event.target.closest(".edit-btn i")) {
+        const modal = document.querySelector("#modal");
+        modal.showModal();
+    }
+});
+
+modal.addEventListener('click', (event) => {
+    if(event.target === modal) {
+        modal.close();
+    }
+});
+
+modalCloseBtn.addEventListener('click', () => {
+    modal.close();
 });
