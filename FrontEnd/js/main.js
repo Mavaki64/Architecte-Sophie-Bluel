@@ -1,7 +1,7 @@
 import { getProjects, displayProjects } from "./works.js";
 import { displayCategories, getCategories, filterByCategory } from "./filters.js";
 import { logout, toggleLoginButton } from "./auth.js";
-import { toggleElementForLoggedUser, isLogged } from "./edit.js";
+import { toggleElementForLoggedUser, isLogged, displayProjectsInModal } from "./edit.js";
 
 const apiBaseUrl = `http://localhost:5678/api/`;
 const filterContainer = document.querySelector(".filter");
@@ -58,9 +58,11 @@ loginBtn.addEventListener('click', async () => {
     }
 });
 
-portfolioHeader.addEventListener("click", (event) => {
+portfolioHeader.addEventListener("click", async (event) => {
     if(event.target.closest(".edit-btn") || event.target.closest(".edit-btn i")) {
         const modal = document.querySelector("#modal");
+        const projects = await getProjects(apiBaseUrl);
+        displayProjectsInModal(projects);
         modal.showModal();
     }
 });

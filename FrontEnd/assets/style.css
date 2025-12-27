@@ -276,6 +276,7 @@ footer nav ul {
 	border-radius: 10px;
 	border: none;
 	padding: 0;
+	position: relative;
 }
 
 #modal::backdrop{
@@ -286,13 +287,16 @@ footer nav ul {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 10px;
-	padding: 26px 30px 45px 105px;
+	gap: 38px;
+	padding: 60px 105px 45px 105px;
 }
 
 .modal-content i{
 	align-self: flex-end;
 	cursor: pointer;
+	position: absolute;
+	top: 32px;
+	right: 36px;
 }
 
 .modal-content h3{
@@ -300,7 +304,7 @@ footer nav ul {
 	font-weight: 400;
 	font-size: 26px;
 	color: black;
-	margin-bottom: 36px;
+	margin-bottom: 8px;
 }
 
 .modal-content-images{
@@ -315,6 +319,8 @@ footer nav ul {
 .modal-content hr{
 	width: 420px;
 	color: #b3b3b3;
+	margin-top: 29px;
+	margin-bottom: 0;
 }
 
 .modal-content-button{
@@ -327,4 +333,24 @@ footer nav ul {
 	font-weight: 700;
 	font-size: 14px;
 	cursor: pointer;
+}
+
+.modal-content-project{
+	position: relative;
+	
+}
+
+.modal-content-project img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.modal-content-project i{
+	position: absolute;
+	top: 0;
+	right: 0;
+	cursor: pointer;
+	color: white;
+	background-color: black;
 }

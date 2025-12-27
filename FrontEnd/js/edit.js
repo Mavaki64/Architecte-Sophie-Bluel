@@ -1,4 +1,6 @@
 import { displayCategories } from "./filters.js";
+import { getProjects, displayProjects } from "./works.js";
+
 export function toggleElementForLoggedUser(isLogged, categories){
     if(isLogged){
         document.body.style.paddingTop = `59px`;
@@ -52,5 +54,40 @@ export function isLogged(){
     } else {
         isLogged = false;
         return isLogged
+    }
+}
+
+export function displayProjectsInModal(projects){
+    const modalGallery = document.querySelector(".modal-content-images");
+    modalGallery.innerHTML = "";
+    for (let i = 0; i < projects.length; i++) {
+        const project = projects[i];
+        const projectElement = document.createElement("div");
+        projectElement.classList.add('modal-content-project');
+        const imageElement = document.createElement("img");
+        imageElement.src = project.imageUrl;
+        imageElement.alt = project.title;
+        const deleteBtn = document.createElement("i");
+        deleteBtn.classList.add("fa-solid", "fa-trash-can");
+        deleteBtn.addEventListener("click", () => {
+            deleteProject(project.id);
+        });
+        projectElement.append(imageElement, deleteBtn);
+        modalGallery.append(projectElement);
+    }
+}
+
+export async function deleteProject(id){
+    const response = await fetch(`http://localhost:5678/api/works/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+    });
+    if(response.ok){
+        const apiBaseUrl = "http://localhost:5678/api/";
+        const projects = await getProjects(apiBaseUrl);
+        displayProjects(projects);
+        displayProjectsInModal(projects);
     }
 }
