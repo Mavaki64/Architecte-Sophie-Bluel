@@ -139,20 +139,20 @@ export function modalCreateForm(){
 			<form action="#" class="add-picture-form">
 				<div class="file-input-container">
 					<i class="fa-regular fa-image fa-6x"></i>
-					<button><input type="file" name="photo" id="photo" required><label for="photo">+ Ajouter
+					<button><input type="file" name="image" id="photo" required><label for="photo">+ Ajouter
 							photo</label></button>
 					<span>jpg, png : 4mo max</span>
 				</div>
 				<div class="form-text-input">
 					<div class="input-container">
 						<label for="titre">Titre</label>
-						<input type="text" name="titre" id="titre" required>
+						<input type="text" name="title" id="titre" required>
 					</div>
 					<div class="input-container">
 						<label for="categorie">Catégorie</label>
                         <div class="select-container">
                             <i class="fa-solid fa-chevron-down"></i>
-						    <select name="categorie" id="categorie" required>
+						    <select name="category" id="categorie" required>
                             </select>
                         </div>
 					</div>
@@ -215,5 +215,28 @@ export function modalCheckFormValidity() {
     } else {
         submitBtn.classList.remove("disabled-btn");
         submitBtn.disabled = false;
+    }
+}
+
+/**
+ * Publie un nouveau projet via l'API et affiche les projets dans la galerie et le modal
+ * @param {string} baseApiUrl - L'URL de l'API
+ * @param {Array<Object>} categories - les catégories
+ */
+export async function publishNewProject(baseApiUrl, categories){
+    const form = document.querySelector(".add-picture-form");
+    const formData = new FormData(form);
+    const response = await fetch(`${baseApiUrl}works`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
+        body: formData
+    });
+    if(response.ok){
+        const projects = await getProjects(baseApiUrl);
+        displayProjects(projects);
+        modalCreateForm();
+        modalDisplayCategories(categories);
     }
 }

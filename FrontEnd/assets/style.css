@@ -467,9 +467,16 @@ footer nav ul {
 
 .modal-content-project i{
 	position: absolute;
-	top: 0;
-	right: 0;
+	top: 6px;
+	right: 5px;
 	cursor: pointer;
 	color: white;
 	background-color: black;
+	width: 17px;
+	height: 17px;
+	font-size: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 2px;
 }

@@ -1,7 +1,7 @@
 import { getProjects, displayProjects } from "./works.js";
 import { displayCategories, getCategories, filterByCategory } from "./filters.js";
 import { logout, toggleLoginButton } from "./auth.js";
-import { toggleElementForLoggedUser, isLogged, initializeModal, displayProjectsInModal, modalCreateForm, modalDisplayCategories, modalDisplayPictureFromInput, modalCheckFormValidity } from "./edit.js";
+import { toggleElementForLoggedUser, isLogged, initializeModal, displayProjectsInModal, modalCreateForm, modalDisplayCategories, modalDisplayPictureFromInput, modalCheckFormValidity, publishNewProject } from "./edit.js";
 
 const apiBaseUrl = `http://localhost:5678/api/`;
 const filterContainer = document.querySelector(".filter");
@@ -76,14 +76,16 @@ portfolioHeader.addEventListener("click", async (event) => {
  * Gère le clic sur le bouton de retour et affiche la galerie photo
  * Gère le clic sur le bouton de fermeture du modal et ferme le modal
  * Gère le clic sur le bouton pour passer à l'étape suivante et affiche le formulaire d'ajout de photo
+ * Gère le clic sur le bouton de validation du formulaire et publie le nouveau projet
  * @param {Event} event - L'événement de clic
  */
-modal.addEventListener('click', (event) => {
+modal.addEventListener('click', async (event) => {
     const modalAddPictureInput = document.querySelector("#photo");
     const modalAddPictureInputBtn = document.querySelector(".file-input-container button");
     const modalBackBtn = document.querySelector(".modal-back-btn");
     const modalCloseBtn = document.querySelector(".modal-close-btn");
     const modalAddPictureBtn = document.querySelector(".modal-content-button");
+    const submitBtn = document.querySelector(".add-picture-form input[type='submit']");
     if(event.target === modal) {
         modal.close();
     }
@@ -98,11 +100,16 @@ modal.addEventListener('click', (event) => {
     }
     else if(event.target === modalBackBtn) {
         initializeModal();
+        const projects = await getProjects(apiBaseUrl);
         displayProjectsInModal(projects);
     }
     else if(event.target === modalAddPictureBtn) {
         modalCreateForm();
         modalDisplayCategories(categories);
+    }
+    else if(event.target === submitBtn){
+        event.preventDefault();
+        publishNewProject(apiBaseUrl, categories);
     }
 });
 
@@ -126,7 +133,7 @@ modal.addEventListener("input", (event) => {
     const categorieInput = document.querySelector("#categorie");
     const fileInput = document.querySelector("#photo");
     if(event.target === titleInput || event.target === categorieInput || event.target === fileInput) {
-        if(fileInput.type === "image/jpeg" || fileInput.type === "image/png") {
+        if(fileInput.files[0].type === "image/jpeg" || fileInput.files[0].type === "image/png") {
             if(fileInput.size < 4 * 1024 * 1024) {
                 modalCheckFormValidity();
             }
