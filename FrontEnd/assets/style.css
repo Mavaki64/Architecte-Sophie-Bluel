@@ -73,6 +73,9 @@ body {
 	align-items: center;
 	gap: 11px;
 }
+.edit-btn{
+	cursor: pointer;
+}
 header {
 	display: flex;
 	justify-content: space-between;
@@ -113,6 +116,7 @@ nav ul {
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
+	cursor: pointer;
 }
 
 li:hover {
@@ -200,6 +204,10 @@ li:hover {
 	background-color: #1D6154;
 	color: white;
 }
+.filter-item:hover{
+	background-color: #0E2F28;
+	color: white;
+}
 .gallery {
 	width: 100%;
 	display: grid;
@@ -254,6 +262,12 @@ input[type="submit"]{
 	height: 36px;
 	text-align: center;
 	border-radius: 60px ;
+	cursor: pointer;
+}
+
+input[type="submit"]:hover{
+	background-color: #0E2F28;
+;
 }
 
 footer{
@@ -361,6 +375,8 @@ footer nav ul {
 	height: 36px;
 	width: 173px;
 	border-radius: 50px;
+	border: none;
+	cursor: pointer;
 }
 
 .file-input-container span{
@@ -399,6 +415,7 @@ footer nav ul {
 
 .input-container select{
 	appearance: none;
+	cursor: pointer;
 }
 
 .form-text-input{
@@ -409,6 +426,11 @@ footer nav ul {
 }
 
 .add-picture-form .disabled-btn{
+	background-color: #a7a7a7;
+	cursor: default;
+}
+
+.add-picture-form .disabled-btn:hover{
 	background-color: #a7a7a7;
 }
 
@@ -452,6 +474,10 @@ footer nav ul {
 	font-weight: 700;
 	font-size: 14px;
 	cursor: pointer;
+}
+
+.modal-content-button:hover{
+	background-color: #0E2F28;
 }
 
 .modal-content-project{
