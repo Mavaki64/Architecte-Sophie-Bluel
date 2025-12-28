@@ -7,9 +7,10 @@ const passwordElement = document.querySelector("#password");
 const errorBox = document.querySelector(".error-box")
 
 /**
- * Vérifie si l'utilisateur est déjà connecté et redirige vers la page d'accueil si c'est le cas
+ * Vérifie si l'utilisateur est déjà connecté et redirige vers la page d'accueil si c'est le cas en cas de rechargement de la page
+ * @param {Event} event - L'événement de chargement de la page
  */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', (event) => {
     if(localStorage.getItem("userId") != null && window.location.href.includes("/login.html")){
         window.location = "./index.html"
     }
@@ -17,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /**
  * Gère le clic sur le bouton de connexion et vérifie les données saisies
- * @param {Event} event - Événement de clic
+ * @param {Event} event - L'événement de clic
  */
 submitBtn.addEventListener('click', async (event) => {
     event.preventDefault();

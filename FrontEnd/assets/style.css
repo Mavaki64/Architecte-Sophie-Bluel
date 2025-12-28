@@ -59,6 +59,20 @@ body {
 	flex-direction: column;
 	min-height: 100vh;
 }
+.edit-bar{
+	background-color: black;
+	position: fixed;
+	z-index: 1;
+	margin: 0;
+	inset: 0;
+	height: 59px;
+	color: white;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: 11px;
+}
 header {
 	display: flex;
 	justify-content: space-between;
@@ -134,8 +148,25 @@ li:hover {
 	align-items: center;
 	gap: 50px;
 }
-#portfolio h2 {
+.portfolio-header{
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	align-items: center;
+	width: 100%;
+	gap: 30px;
+}
+.portfolio-header h2 {
 	text-align: center;
+	margin: 0;
+	grid-column: 2;
+}
+.portfolio-header p {
+	margin: 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 10px;
+
 }
 .filter{
 	display: flex;
@@ -239,3 +270,213 @@ footer nav ul {
 	margin: 2em
 }
 
+#modal{
+	width: 630px;
+	background-color: white;
+	border-radius: 10px;
+	border: none;
+	padding: 0;
+	position: relative;
+}
+
+#modal::backdrop{
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modal-content{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 38px;
+	padding: 60px 105px 45px 105px;
+}
+
+.modal-close-btn{
+	align-self: flex-end;
+	cursor: pointer;
+	position: absolute;
+	top: 32px;
+	right: 36px;
+}
+
+.modal-back-btn{
+	align-self: flex-start;
+	cursor: pointer;
+	position: absolute;
+	top: 27px;
+	left: 30px;
+}
+
+.modal-content h3{
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 400;
+	font-size: 26px;
+	color: black;
+	margin-bottom: 8px;
+}
+
+.add-picture-form{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	gap: 30px;
+}
+
+.file-input-container{
+	position: relative;
+	background-color: #e8f1f6;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 13px 124px 19px 123px;
+	gap: 6px;
+	border-radius: 3px;
+}
+
+.file-input-container img{
+	position: absolute;
+	top: 0;
+	height: 100%;
+	width: 129px;
+	object-fit: cover;
+	z-index: 2;
+}
+
+.file-input-container i{
+	color: #B9C5CC;
+}
+
+.file-input-container button{
+	background-color: #cbd6dc;
+	color: #306685;
+	font-size: 14px;
+	font-family: 'work sans', sans-serif;
+	font-weight: 500;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 36px;
+	width: 173px;
+	border-radius: 50px;
+}
+
+.file-input-container span{
+	font-family: 'work sans', sans-serif;
+	color: #444444;
+	font-size: 10px;
+	font-weight: 400;
+}
+
+.file-input-container input[type="file"]{
+	position: absolute;
+	z-index: -999;
+}
+
+.input-container{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 10px;
+	width: 420px;
+	color: #3d3d3d;
+	font-size: 14px;
+	font-weight: 500;
+	font-family: 'work sans', sans-serif;
+}
+
+.input-container input[type="text"], .input-container select{
+	box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
+	color: #444444;
+	width: 100%;
+	height: 51px;
+	padding: 17px 29px 17px 16px;
+	box-sizing: border-box;
+	border: none;
+}
+
+.input-container select{
+	appearance: none;
+}
+
+.form-text-input{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 21px;
+}
+
+.add-picture-form .disabled-btn{
+	background-color: #a7a7a7;
+}
+
+.select-container{
+	position: relative;
+	width: 100%;
+}
+
+.fa-chevron-down{
+	position: absolute;
+	z-index: 2;
+	pointer-events: none;
+	color: #6c6c6c;
+	top: 20px;
+	right: 29px;
+}
+
+.modal-content-images{
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-column-gap: 9px;
+	grid-row-gap: 29px;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal-content hr{
+	width: 420px;
+	color: #b3b3b3;
+	margin-top: 29px;
+	margin-bottom: 0;
+}
+
+.modal-content-button{
+	height: 36px;
+	border-radius: 60px;
+	padding: 9px 49px 9px 49px;
+	background-color: #1D6154;
+	color: white;
+	font-family: 'Syne', sans-serif;
+	font-weight: 700;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.modal-content-project{
+	position: relative;
+	
+}
+
+.modal-content-project img{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.modal-content-project i{
+	position: absolute;
+	top: 6px;
+	right: 5px;
+	cursor: pointer;
+	color: white;
+	background-color: black;
+	width: 17px;
+	height: 17px;
+	font-size: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 2px;
+}
