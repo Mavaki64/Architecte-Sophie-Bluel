@@ -1,6 +1,11 @@
 import { displayCategories } from "./filters.js";
 import { getProjects, displayProjects } from "./works.js";
 
+/**
+ * Toggle les éléments pour l'utilisateur connecté ou non
+ * @param {boolean} isLogged - True si l'utilisateur est connecté, false sinon
+ * @param {Array<Object>} categories - les catégories
+ */
 export function toggleElementForLoggedUser(isLogged, categories){
     if(isLogged){
         document.body.style.paddingTop = `59px`;
@@ -22,6 +27,9 @@ export function toggleElementForLoggedUser(isLogged, categories){
     }
 }
 
+/**
+ * Crée la barre de modification
+ */
 export function createEditBar(){
     const editBar = document.createElement("section");
     editBar.classList.add("edit-bar");
@@ -33,6 +41,9 @@ export function createEditBar(){
     editBar.append(logoElement, textElement);
 }
 
+/**
+ * Crée le bouton de modification
+ */
 export function createEditBtn(){
     const editBtnContainer = document.querySelector(".portfolio-header");
     const editBtn = document.createElement("p");
@@ -44,6 +55,10 @@ export function createEditBtn(){
     editBtn.prepend(editBtnIcon);
 }
 
+/**
+ * Vérifie si l'utilisateur est connecté
+ * @returns {boolean} True si l'utilisateur est connecté, false sinon
+ */
 export function isLogged(){
     const user_id = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
@@ -57,6 +72,10 @@ export function isLogged(){
     }
 }
 
+/**
+ * Affiche les projets dans le modal
+ * @param {Array<Object>} projects - les projets
+ */
 export function displayProjectsInModal(projects){
     const modalGallery = document.querySelector(".modal-content-images");
     modalGallery.innerHTML = "";
@@ -77,6 +96,10 @@ export function displayProjectsInModal(projects){
     }
 }
 
+/**
+ * Supprime un projet via l'API et affiche les projets dans la galerie et le modal
+ * @param {integer} id - L'ID du projet
+ */
 export async function deleteProject(id){
     const response = await fetch(`http://localhost:5678/api/works/${id}`, {
         method: "DELETE",

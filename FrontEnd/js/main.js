@@ -58,6 +58,10 @@ loginBtn.addEventListener('click', async () => {
     }
 });
 
+/**
+ * Gère le clic sur le bouton de modification et affiche le modal
+ * @param {Event} event - L'événement de clic
+ */
 portfolioHeader.addEventListener("click", async (event) => {
     if(event.target.closest(".edit-btn") || event.target.closest(".edit-btn i")) {
         const modal = document.querySelector("#modal");
@@ -67,12 +71,20 @@ portfolioHeader.addEventListener("click", async (event) => {
     }
 });
 
+/**
+ * Gère le clic sur le modal (Le modal étant couvert par un élément div le click sur le modal est pris en compte sur le backdrop) et ferme le modal
+ * @param {Event} event - L'événement de clic
+ */
 modal.addEventListener('click', (event) => {
     if(event.target === modal) {
         modal.close();
     }
 });
 
+/**
+ * Gère le clic sur le bouton de fermeture du modal et ferme le modal
+ * @param {Event} event - L'événement de clic
+ */
 modalCloseBtn.addEventListener('click', () => {
     modal.close();
 });

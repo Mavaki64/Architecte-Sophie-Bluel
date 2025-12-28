@@ -45,6 +45,10 @@ export function logout(){
     localStorage.removeItem("token");
 }
 
+/**
+ * Modifie le texte du bouton de connexion en fonction de l'état de l'authentification
+ * @param {Element} loginBtn - Le bouton de connexion
+ */
 export function toggleLoginButton(loginBtn){
     if(localStorage.getItem("userId") != null && localStorage.getItem("token") != null){
         loginBtn.textContent = "logout";
