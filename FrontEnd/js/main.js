@@ -8,11 +8,16 @@ const filterContainer = document.querySelector(".filter");
 const loginBtn = document.querySelector(".login");
 const portfolioHeader = document.querySelector(".portfolio-header");
 const modal = document.querySelector("#modal");
+const indexLink = document.querySelector(".index-link");
+const projectsLink = document.querySelector(".projects-link");
+const contactLink = document.querySelector(".contact-link");
 let projects;
 let categories;
 
 /**
  * Charge les projets et les catégories et affiche les projets et les catégories
+ * Ajoute la classe nav-bold au lien de projets ou de contact si la page est la page de projets ou de contact
+ * Fait défiler la page jusqu'à la section cible
  */
 document.addEventListener('DOMContentLoaded', async () => {
     projects = await getProjects(apiBaseUrl);
@@ -22,6 +27,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     displayCategories(categories);
     toggleLoginButton(loginBtn);
     toggleElementForLoggedUser(userIsLogged, categories);
+    if(window.location.href.includes("/index.html#portfolio")){
+        projectsLink.classList.add("nav-bold");
+    }
+    if(window.location.href.includes("/index.html#contact")){
+        contactLink.classList.add("nav-bold");
+    }
+    scrollToSection();
 });
 
 /**
@@ -140,3 +152,52 @@ modal.addEventListener("input", (event) => {
         }
     }
 });
+
+/**
+ * Gère le clic sur le lien de l'index et redirige vers la page d'accueil
+ * @param {Event} event - L'événement de clic
+ */
+indexLink.addEventListener('click', () => {
+    window.location = './index.html';
+});
+
+/**
+ * Gère le clic sur le lien de projets et redirige vers la page de projets
+ * @param {Event} event - L'événement de clic
+ */
+projectsLink.addEventListener('click', () => {
+    window.location = './index.html#portfolio';
+    removeNavBoldClass();
+    projectsLink.classList.add("nav-bold");
+});
+
+/**
+ * Gère le clic sur le lien de contact et redirige vers la page de contact
+ * @param {Event} event - L'événement de clic
+ */
+contactLink.addEventListener('click', () => {
+    window.location = './index.html#contact';
+    removeNavBoldClass();
+    contactLink.classList.add("nav-bold");
+});
+
+/**
+ * Retire la classe nav-bold des liens de projets et de contact
+ */
+function removeNavBoldClass(){
+    projectsLink.classList.remove("nav-bold");
+    contactLink.classList.remove("nav-bold");
+}
+
+/**
+ * Fait défiler la page jusqu'à la section cible
+ */
+function scrollToSection(){
+    const targetSection = window.location.hash;
+    const targetSectionElement = document.querySelector(targetSection);
+    if(targetSectionElement){
+        setTimeout(() => {
+            targetSectionElement.scrollIntoView({ behavior: 'smooth' });
+        }, 50);
+    }
+}

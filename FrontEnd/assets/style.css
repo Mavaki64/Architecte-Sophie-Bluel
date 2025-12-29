@@ -30,6 +30,9 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+html{
+	scroll-behavior: smooth;
+}
 body {
 	line-height: 1;
 	background-color: #FFFEF8;
@@ -74,6 +77,9 @@ body {
 	gap: 11px;
 }
 .edit-btn{
+	cursor: pointer;
+}
+.index-link{
 	cursor: pointer;
 }
 header {
@@ -121,6 +127,10 @@ nav li {
 
 li:hover {
 	color: #B1663C;
+}
+
+nav li.nav-bold{
+	font-weight: 700;
 }
 #introduction {
 	display: flex;
