@@ -5,14 +5,20 @@ const apiBaseUrl = `http://localhost:5678/api/`;
 const emailElement = document.querySelector("#email");
 const passwordElement = document.querySelector("#password");
 const errorBox = document.querySelector(".error-box")
-
+const projectsLink = document.querySelector(".projects-link");
+const contactLink = document.querySelector(".contact-link");
+const indexLink = document.querySelector(".index-link");
 /**
  * Vérifie si l'utilisateur est déjà connecté et redirige vers la page d'accueil si c'est le cas en cas de rechargement de la page
+ * Ajoute la classe nav-bold au lien de connexion si la page est la page de connexion
  * @param {Event} event - L'événement de chargement de la page
  */
 document.addEventListener('DOMContentLoaded', (event) => {
     if(localStorage.getItem("userId") != null && window.location.href.includes("/login.html")){
         window.location = "./index.html"
+    }
+    if(window.location.href.includes("/login.html")){
+        document.querySelector(".login").classList.add("nav-bold");
     }
 });
 
@@ -45,4 +51,28 @@ submitBtn.addEventListener('click', async (event) => {
         toggleLoginButton(document.querySelector(".login"));
         window.location = './index.html';
     }
+});
+
+/**
+ * Gère le clic sur le lien de projets et redirige vers la page de projets
+ * @param {Event} event - L'événement de clic
+ */
+projectsLink.addEventListener('click', () => {
+    window.location = './index.html#portfolio';
+});
+
+/**
+ * Gère le clic sur le lien de contact et redirige vers la page de contact
+ * @param {Event} event - L'événement de clic
+ */
+contactLink.addEventListener('click', () => {
+    window.location = './index.html#contact';
+});
+
+/**
+ * Gère le clic sur le lien de l'index et redirige vers la page d'accueil
+ * @param {Event} event - L'événement de clic
+ */
+indexLink.addEventListener('click', () => {
+    window.location = './index.html';
 });

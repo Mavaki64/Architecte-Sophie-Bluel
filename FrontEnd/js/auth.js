@@ -35,6 +35,7 @@ export async function loginUser(apiBaseUrl, email, password, errorBox){
 export function saveAuth(userId, token){
     localStorage.setItem("userId", userId);
     localStorage.setItem("token", token)
+    localStorage.setItem("timeStamp", Date.now());
 }
 
 /**
@@ -43,6 +44,7 @@ export function saveAuth(userId, token){
 export function logout(){
     localStorage.removeItem("userId");
     localStorage.removeItem("token");
+    localStorage.removeItem("timeStamp");
 }
 
 /**
@@ -54,5 +56,20 @@ export function toggleLoginButton(loginBtn){
         loginBtn.textContent = "logout";
     } else {
         loginBtn.textContent = "login";
+    }
+}
+
+export function checkSessionExpiry(){
+    const timeStamp = localStorage.getItem("timeStamp");
+    const user_id = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    if(user_id && token && timeStamp){
+        const now = Date.now();
+        const sessionAge = now - parseInt(timeStamp);
+        const twentyFourHours = 24 * 60 * 60 * 1000;
+        if(sessionAge > twentyFourHours){
+            logout();
+            window.location.reload();
+        }
     }
 }

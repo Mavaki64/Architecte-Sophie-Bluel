@@ -30,6 +30,9 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+html{
+	scroll-behavior: smooth;
+}
 body {
 	line-height: 1;
 	background-color: #FFFEF8;
@@ -58,6 +61,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
+	overflow-x: hidden;
 }
 .edit-bar{
 	background-color: black;
@@ -72,6 +76,12 @@ body {
 	justify-content: center;
 	align-items: center;
 	gap: 11px;
+}
+.edit-btn{
+	cursor: pointer;
+}
+.index-link{
+	cursor: pointer;
 }
 header {
 	display: flex;
@@ -113,10 +123,15 @@ nav ul {
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
+	cursor: pointer;
 }
 
 li:hover {
 	color: #B1663C;
+}
+
+nav li.nav-bold{
+	font-weight: 700;
 }
 #introduction {
 	display: flex;
@@ -200,6 +215,10 @@ li:hover {
 	background-color: #1D6154;
 	color: white;
 }
+.filter-item:hover{
+	background-color: #0E2F28;
+	color: white;
+}
 .gallery {
 	width: 100%;
 	display: grid;
@@ -254,14 +273,32 @@ input[type="submit"]{
 	height: 36px;
 	text-align: center;
 	border-radius: 60px ;
+	cursor: pointer;
+}
+
+input[type="submit"]:hover{
+	background-color: #0E2F28;
+;
 }
 
 footer{
 	width: 100%;
 	height: 60px;
-	background-color: white;
 	padding: 21.5px 0;
 	margin-top: auto;
+	position:relative;
+}
+
+footer::before{
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100vw;
+	height: 100%;
+	background-color: white;
+	z-index: -1;
 }
 
 footer nav ul {
@@ -361,6 +398,8 @@ footer nav ul {
 	height: 36px;
 	width: 173px;
 	border-radius: 50px;
+	border: none;
+	cursor: pointer;
 }
 
 .file-input-container span{
@@ -399,6 +438,7 @@ footer nav ul {
 
 .input-container select{
 	appearance: none;
+	cursor: pointer;
 }
 
 .form-text-input{
@@ -409,6 +449,11 @@ footer nav ul {
 }
 
 .add-picture-form .disabled-btn{
+	background-color: #a7a7a7;
+	cursor: default;
+}
+
+.add-picture-form .disabled-btn:hover{
 	background-color: #a7a7a7;
 }
 
@@ -452,6 +497,10 @@ footer nav ul {
 	font-weight: 700;
 	font-size: 14px;
 	cursor: pointer;
+}
+
+.modal-content-button:hover{
+	background-color: #0E2F28;
 }
 
 .modal-content-project{
