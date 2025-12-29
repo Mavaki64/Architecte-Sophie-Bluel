@@ -1,6 +1,6 @@
 import { getProjects, displayProjects } from "./works.js";
 import { displayCategories, getCategories, filterByCategory } from "./filters.js";
-import { logout, toggleLoginButton } from "./auth.js";
+import { logout, toggleLoginButton, checkSessionExpiry } from "./auth.js";
 import { toggleElementForLoggedUser, isLogged, initializeModal, displayProjectsInModal, modalCreateForm, modalDisplayCategories, modalDisplayPictureFromInput, modalCheckFormValidity, publishNewProject } from "./edit.js";
 
 const apiBaseUrl = `http://localhost:5678/api/`;
@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         contactLink.classList.add("nav-bold");
     }
     scrollToSection();
+    checkSessionExpiry();
+    setInterval(checkSessionExpiry, 60000);
 });
 
 /**
