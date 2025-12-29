@@ -196,10 +196,12 @@ function removeNavBoldClass(){
  */
 function scrollToSection(){
     const targetSection = window.location.hash;
-    const targetSectionElement = document.querySelector(targetSection);
-    if(targetSectionElement){
-        setTimeout(() => {
-            targetSectionElement.scrollIntoView({ behavior: 'smooth' });
-        }, 50);
+    if(targetSection && targetSection.lenght > 0){
+        const targetSectionElement = document.querySelector(targetSection);
+        if(targetSectionElement){
+            setTimeout(() => {
+                targetSectionElement.scrollIntoView({ behavior: 'smooth' });
+            }, 50);
+        }
     }
 }

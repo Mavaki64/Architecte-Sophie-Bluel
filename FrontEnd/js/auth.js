@@ -63,7 +63,7 @@ export function checkSessionExpiry(){
     const timeStamp = localStorage.getItem("timeStamp");
     const user_id = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
-    if(userId && token && timeStamp){
+    if(user_id && token && timeStamp){
         const now = Date.now();
         const sessionAge = now - parseInt(timeStamp);
         const twentyFourHours = 24 * 60 * 60 * 1000;
