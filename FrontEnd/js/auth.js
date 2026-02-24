@@ -1,29 +1,19 @@
+import { loginApi } from "./api.js";
+
 /**
  * Connecte l'utilisateur et sauvegarde les données d'authentification
  * @param {string} email - Adresse e-mail de l'utilisateur
  * @param {string} password - Mot de passe de l'utilisateur
  */
-export async function loginUser(apiBaseUrl, email, password, errorBox){
+export async function loginUser(email, password, errorBox){
     try{
-        const response = await fetch(`${apiBaseUrl}users/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email,
-                password
-            })
-        });
-    
-        if (!response.ok){
-            throw new Error("Erreur d'authentification.\nE-mail ou mot de passe incorrect.");
-        }
-    
-        const loginData = await response.json();
+        const loginData = await loginApi(email, password);
         return loginData;
     } catch(error){
-        errorBox.innerHTML = `<p>${error.message}</p>`;
+        if (errorBox) {
+            errorBox.innerHTML = `<p>${error.message}</p>`;
+        }
+        return null;
     }
 }
 
@@ -52,7 +42,7 @@ export function logout(){
  * @param {Element} loginBtn - Le bouton de connexion
  */
 export function toggleLoginButton(loginBtn){
-    if(localStorage.getItem("userId") != null && localStorage.getItem("token") != null){
+    if(isLogged()){
         loginBtn.textContent = "logout";
     } else {
         loginBtn.textContent = "login";
@@ -72,4 +62,14 @@ export function checkSessionExpiry(){
             window.location.reload();
         }
     }
+}
+
+
+/** Nouvelle fonction **/
+export function getToken(){
+    return localStorage.getItem("token");
+}
+
+export function isLogged(){
+    return localStorage.getItem("userId") != null && localStorage.getItem("token") != null;
 }

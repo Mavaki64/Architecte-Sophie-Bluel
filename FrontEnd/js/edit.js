@@ -1,5 +1,6 @@
 import { displayCategories } from "./filters.js";
 import { getProjects, displayProjects } from "./works.js";
+import { apiBaseUrl } from "./config.js";
 
 /**
  * Toggle les éléments pour l'utilisateur connecté ou non
@@ -121,7 +122,6 @@ export async function deleteProject(id){
         }
     });
     if(response.ok){
-        const apiBaseUrl = "http://localhost:5678/api/";
         const projects = await getProjects(apiBaseUrl);
         displayProjects(projects);
         displayProjectsInModal(projects);
@@ -238,5 +238,6 @@ export async function publishNewProject(baseApiUrl, categories){
         displayProjects(projects);
         modalCreateForm();
         modalDisplayCategories(categories);
+        return projects;
     }
 }

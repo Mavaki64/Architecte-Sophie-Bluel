@@ -2,15 +2,13 @@ import { getProjects, displayProjects } from "./works.js";
 import { displayCategories, getCategories, filterByCategory } from "./filters.js";
 import { logout, toggleLoginButton, checkSessionExpiry } from "./auth.js";
 import { toggleElementForLoggedUser, isLogged, initializeModal, displayProjectsInModal, modalCreateForm, modalDisplayCategories, modalDisplayPictureFromInput, modalCheckFormValidity, publishNewProject } from "./edit.js";
+import { apiBaseUrl } from "./config.js";
+import { initNavLinks } from "./nav.js";
 
-const apiBaseUrl = `http://localhost:5678/api/`;
 const filterContainer = document.querySelector(".filter");
 const loginBtn = document.querySelector(".login");
 const portfolioHeader = document.querySelector(".portfolio-header");
 const modal = document.querySelector("#modal");
-const indexLink = document.querySelector(".index-link");
-const projectsLink = document.querySelector(".projects-link");
-const contactLink = document.querySelector(".contact-link");
 let projects;
 let categories;
 
@@ -27,12 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     displayCategories(categories);
     toggleLoginButton(loginBtn);
     toggleElementForLoggedUser(userIsLogged, categories);
-    if(window.location.href.includes("/index.html#portfolio")){
-        projectsLink.classList.add("nav-bold");
-    }
-    if(window.location.href.includes("/index.html#contact")){
-        contactLink.classList.add("nav-bold");
-    }
+    initNavLinks({ setActiveLink: true });
     scrollToSection();
     checkSessionExpiry();
     setInterval(checkSessionExpiry, 60000);
@@ -123,7 +116,10 @@ modal.addEventListener('click', async (event) => {
     }
     else if(event.target === submitBtn){
         event.preventDefault();
-        publishNewProject(apiBaseUrl, categories);
+        const updatedProjects = await publishNewProject(apiBaseUrl, categories);
+        if(updatedProjects) {
+            projects = updatedProjects;
+        }
     }
 });
 
@@ -154,42 +150,6 @@ modal.addEventListener("input", (event) => {
         }
     }
 });
-
-/**
- * Gère le clic sur le lien de l'index et redirige vers la page d'accueil
- * @param {Event} event - L'événement de clic
- */
-indexLink.addEventListener('click', () => {
-    window.location = './index.html';
-});
-
-/**
- * Gère le clic sur le lien de projets et redirige vers la page de projets
- * @param {Event} event - L'événement de clic
- */
-projectsLink.addEventListener('click', () => {
-    window.location = './index.html#portfolio';
-    removeNavBoldClass();
-    projectsLink.classList.add("nav-bold");
-});
-
-/**
- * Gère le clic sur le lien de contact et redirige vers la page de contact
- * @param {Event} event - L'événement de clic
- */
-contactLink.addEventListener('click', () => {
-    window.location = './index.html#contact';
-    removeNavBoldClass();
-    contactLink.classList.add("nav-bold");
-});
-
-/**
- * Retire la classe nav-bold des liens de projets et de contact
- */
-function removeNavBoldClass(){
-    projectsLink.classList.remove("nav-bold");
-    contactLink.classList.remove("nav-bold");
-}
 
 /**
  * Fait défiler la page jusqu'à la section cible
