@@ -60,12 +60,12 @@ export function initializeModal(){
     const modal = document.querySelector("#modal");
     modal.innerHTML = "";
     modal.innerHTML = `<div class="modal-content">
-			<i class="fa-solid fa-xmark fa-2x modal-close-btn"></i>
+			<i class="fa-solid fa-xmark fa-2x modal-close-btn" data-action="close"></i>
 			<h3>Galerie photo</h3>
 			<div class="modal-content-images">
 			</div>
 			<hr>
-			<button class="modal-content-button">Ajouter une photo</button>
+			<button class="modal-content-button" data-action="showAddForm">Ajouter une photo</button>
 		</div>`;
 }
 
@@ -109,14 +109,14 @@ export async function deleteProject(id){
  */
 export function modalCreateForm(){
     const modalContent = document.querySelector(".modal-content");
-    modalContent.innerHTML = `<i class="fa-solid fa-xmark fa-2x modal-close-btn"></i>
-		<i class="fa-solid fa-arrow-left fa-2x modal-back-btn"></i>
+    modalContent.innerHTML = `<i class="fa-solid fa-xmark fa-2x modal-close-btn" data-action="close"></i>
+		<i class="fa-solid fa-arrow-left fa-2x modal-back-btn" data-action="back"></i>
 		<h3>Ajout photo</h3>
 		<form action="#" class="add-picture-form">
 			<div class="file-input-container">
-				<i class="fa-regular fa-image fa-6x"></i>
-				<button><input type="file" name="image" id="photo" required><label for="photo">+ Ajouter
-						photo</label></button>
+				<i class="fa-regular fa-image fa-6x" data-action="add-picture"></i>
+				<input type="file" name="image" id="photo" required><label for="photo">+ Ajouter
+						photo</label>
 				<span>jpg, png : 4mo max</span>
 			</div>
 			<div class="form-text-input">
@@ -134,7 +134,7 @@ export function modalCreateForm(){
 				</div>
             </div>
 			<hr>
-			<input type="submit" value="Valider" class="disabled-btn" disabled>
+			<input type="submit" value="Valider" class="disabled-btn" disabled data-action="submit">
 		</form>`;
     modalDisplayCategories();
 }
@@ -167,7 +167,7 @@ export function modalDisplayCategories() {
  */
 export function modalDisplayPictureFromInput(file) {
     const fileInputContainer = document.querySelector(".file-input-container");
-    const btnElement = document.querySelector(".file-input-container button");
+    const btnElement = document.querySelector(".file-input-container label");
     btnElement.style.opacity = "0";
     btnElement.style.pointerEvents = "none";
     const imageElement = document.createElement("img");

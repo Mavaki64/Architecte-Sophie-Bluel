@@ -1,7 +1,7 @@
 import { fetchProjects, displayProjects } from "./works.js";
 import { displayCategories, fetchCategories, filterByCategory } from "./filters.js";
 import { logout, toggleLoginButton, checkSessionExpiry } from "./auth.js";
-import { toggleElementForLoggedUser, initializeModal, displayProjectsInModal, modalCreateForm, modalDisplayCategories, modalDisplayPictureFromInput, modalCheckFormValidity, publishNewProject } from "./edit.js";
+import { toggleElementForLoggedUser, initializeModal, displayProjectsInModal, modalCreateForm, modalDisplayCategories, modalDisplayPictureFromInput, modalCheckFormValidity, publishNewProject } from "./modal.js";
 import { initNavLinks } from "./nav.js";
 import * as state from "./state.js";
 
@@ -73,44 +73,25 @@ portfolioHeader.addEventListener("click", async (event) => {
 });
 
 /**
- * Gère le clic sur le modal (Le modal étant couvert par un élément div le click sur le modal est pris en compte sur le backdrop) et ferme le modal
- * Gère le clic sur le bouton d'ajout de photo et ouvre le sélecteur de fichier
- * Gère le clic sur le bouton de retour et affiche la galerie photo
- * Gère le clic sur le bouton de fermeture du modal et ferme le modal
- * Gère le clic sur le bouton pour passer à l'étape suivante et affiche le formulaire d'ajout de photo
- * Gère le clic sur le bouton de validation du formulaire et publie le nouveau projet
+ * Gère le click sur les éléments du modal (fermeture, retour, ajout de photo, validation) par délégation avec leur data-action.
+ *
  * @param {Event} event - L'événement de clic
  */
+const modalActions = {
+    close: () => modal.close(),
+    back: () => { initializeModal(); displayProjectsInModal(); },
+    showAddForm: () => modalCreateForm(),
+    submit: async (event) => { event.preventDefault(); await publishNewProject(); },
+}
+
 modal.addEventListener('click', async (event) => {
-    const modalAddPictureInput = document.querySelector("#photo");
-    const modalAddPictureInputBtn = document.querySelector(".file-input-container button");
-    const modalBackBtn = document.querySelector(".modal-back-btn");
-    const modalCloseBtn = document.querySelector(".modal-close-btn");
-    const modalAddPictureBtn = document.querySelector(".modal-content-button");
-    const submitBtn = document.querySelector(".add-picture-form input[type='submit']");
     if(event.target === modal) {
         modal.close();
+        return;
     }
-    else if(event.target === modalCloseBtn) {
-        modal.close();
-    }
-    else if(event.target === modalAddPictureInputBtn) {
-        event.preventDefault();
-        if(modalAddPictureInput){
-            modalAddPictureInput.click();
-        }
-    }
-    else if(event.target === modalBackBtn) {
-        initializeModal();
-        displayProjectsInModal();
-    }
-    else if(event.target === modalAddPictureBtn) {
-        modalCreateForm();
-        modalDisplayCategories();
-    }
-    else if(event.target === submitBtn){
-        event.preventDefault();
-        await publishNewProject();
+    const action = event.target.closest("[data-action]").dataset.action;
+    if (action && modalActions[action]) {
+        await modalActions[action](event);
     }
 });
 
