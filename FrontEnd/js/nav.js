@@ -29,9 +29,7 @@ export function initNavLinks(options = {}) {
         if (loginBtn.textContent.includes("login")) {
             window.location.href = "./login.html";
         } else {
-            if (options.onLogout) {
-                options.onLogout();
-            }
+            if (options.onLogout) options.onLogout();
         }
     });
 
@@ -58,12 +56,8 @@ export function initNavLinks(options = {}) {
         }
     });
 
-    if (options.setActiveLink) {
-        setActiveLinkFromHash();
-    }
+    if (options.setActiveLink) setActiveLinkFromHash();
 
     // Sur la page login, mettre en avant le lien "login"
-    if (window.location.href.includes("/login.html")) {
-        document.querySelector(".login")?.classList.add("nav-bold");
-    }
+    if (window.location.href.includes("/login.html")) document.querySelector(".login")?.classList.add("nav-bold");
 }

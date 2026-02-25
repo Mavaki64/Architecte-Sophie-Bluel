@@ -10,9 +10,7 @@ const errorBox = document.querySelector(".error-box");
  * Initialise les liens de navigation (dont la mise en avant du lien "login" sur cette page).
  */
 document.addEventListener('DOMContentLoaded', () => {
-    if (isLogged() && window.location.href.includes("/login.html")) {
-        window.location = "./index.html";
-    }
+    if (isLogged() && window.location.href.includes("/login.html")) window.location = "./index.html";
     initNavLinks();
 });
 
@@ -41,9 +39,7 @@ submitBtn.addEventListener('click', async (event) => {
 
     const loginData = await loginUser(emailElement.value, passwordElement.value, errorBox);
     if(loginData){
-        console.log(loginData);
         saveAuth(loginData.userId, loginData.token);
         window.location = './index.html';
-        toggleLoginButton(document.querySelector(".login"));
     }
 });

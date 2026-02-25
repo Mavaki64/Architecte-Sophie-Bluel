@@ -11,19 +11,12 @@ export function toggleElementForLoggedUser(){
     if(isLogged()){
         document.body.style.paddingTop = `59px`;
         createEditBar();
-        const filtersContainer = document.querySelector(".filter");
-        filtersContainer.innerHTML = "";
+        document.querySelector(".filter").innerHTML = "";
         createEditBtn();
     }else{
         document.body.style.paddingTop = `0px`;
-        const editBar = document.querySelector(".edit-bar");
-        if(editBar){
-            editBar.remove();
-        }
-        const editBtn = document.querySelector(".edit-btn");
-        if(editBtn){
-            editBtn.remove();
-        }
+        document.querySelector(".edit-bar")?.remove();
+        document.querySelector(".edit-btn")?.remove();
         displayCategories();
     }
 }
@@ -46,14 +39,13 @@ export function createEditBar(){
  * Crée le bouton de modification
  */
 export function createEditBtn(){
-    const editBtnContainer = document.querySelector(".portfolio-header");
     const editBtn = document.createElement("p");
     const editBtnIcon = document.createElement("i");
     editBtnIcon.classList.add("fa-regular", "fa-pen-to-square");
     editBtn.textContent = "modifier";
     editBtn.classList.add("edit-btn");
-    editBtnContainer.append(editBtn);
     editBtn.prepend(editBtnIcon);
+    document.querySelector(".portfolio-header").append(editBtn);
 }
 
 export function initializeModal(){
@@ -109,34 +101,33 @@ export async function deleteProject(id){
  * Crée le formulaire d'ajout de photo
  */
 export function modalCreateForm(){
-    const modalContent = document.querySelector(".modal-content");
-    modalContent.innerHTML = `<i class="fa-solid fa-xmark fa-2x modal-close-btn" data-action="close"></i>
-		<i class="fa-solid fa-arrow-left fa-2x modal-back-btn" data-action="back"></i>
-		<h3>Ajout photo</h3>
-		<form action="#" class="add-picture-form">
-			<div class="file-input-container">
-				<i class="fa-regular fa-image fa-6x" data-action="add-picture"></i>
-				<input type="file" name="image" id="photo" required><label for="photo">+ Ajouter
-						photo</label>
-				<span>jpg, png : 4mo max</span>
+    document.querySelector(".modal-content").innerHTML = `<i class="fa-solid fa-xmark fa-2x modal-close-btn" data-action="close"></i>
+	<i class="fa-solid fa-arrow-left fa-2x modal-back-btn" data-action="back"></i>
+	<h3>Ajout photo</h3>
+	<form action="#" class="add-picture-form">
+		<div class="file-input-container">
+			<i class="fa-regular fa-image fa-6x"></i>
+			<input type="file" name="image" id="photo" required>
+            <label for="photo">+ Ajouter photo</label>
+			<span>jpg, png : 4mo max</span>
+		</div>
+		<div class="form-text-input">
+			<div class="input-container">
+				<label for="titre">Titre</label>
+				<input type="text" name="title" id="titre" required>
 			</div>
-			<div class="form-text-input">
-				<div class="input-container">
-					<label for="titre">Titre</label>
-					<input type="text" name="title" id="titre" required>
-				</div>
-				<div class="input-container">
-					<label for="categorie">Catégorie</label>
-                    <div class="select-container">
-                        <i class="fa-solid fa-chevron-down"></i>
-					    <select name="category" id="categorie" required>
-                        </select>
-                    </div>
-				</div>
-            </div>
-			<hr>
-			<input type="submit" value="Valider" class="disabled-btn" disabled data-action="submit">
-		</form>`;
+			<div class="input-container">
+				<label for="categorie">Catégorie</label>
+                <div class="select-container">
+                    <i class="fa-solid fa-chevron-down"></i>
+				    <select name="category" id="categorie" required>
+                    </select>
+                </div>
+			</div>
+        </div>
+		<hr>
+		<input type="submit" value="Valider" class="disabled-btn" disabled data-action="submit">
+	</form>`;
     modalDisplayCategories();
 }
 
@@ -167,14 +158,13 @@ export function modalDisplayCategories() {
  * @param {File} file - le fichier
  */
 export function modalDisplayPictureFromInput(file) {
-    const fileInputContainer = document.querySelector(".file-input-container");
     const btnElement = document.querySelector(".file-input-container label");
     btnElement.style.opacity = "0";
     btnElement.style.pointerEvents = "none";
     const imageElement = document.createElement("img");
     imageElement.src = URL.createObjectURL(file);
     imageElement.alt = file.name;
-    fileInputContainer.append(imageElement);
+    document.querySelector(".file-input-container").append(imageElement);
 }
 
 /**
@@ -198,8 +188,7 @@ export function modalCheckFormValidity() {
  * Publie un nouveau projet via l'API et affiche les projets dans la galerie et le modal
  */
 export async function publishNewProject(){
-    const form = document.querySelector(".add-picture-form");
-    const formData = new FormData(form);
+    const formData = new FormData(document.querySelector(".add-picture-form"));
     const response = await publishProjectRequest(formData);
     if (response.ok){
         state.setProjects([...state.getProjects(), await response.json()]);
