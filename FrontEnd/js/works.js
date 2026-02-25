@@ -24,8 +24,7 @@ export async function fetchProjects(id = null) {
 export function displayProjects(projects = state.getProjects()){
     const gallery = document.querySelector(".gallery");
     gallery.innerHTML = "";
-    for (let i = 0; i < projects.length; i++) {
-        const project = projects[i];
+    projects.forEach((project) => {
         const figureElement = document.createElement("figure");
         const imageElement = document.createElement("img");
         const figcaptionElement = document.createElement("figcaption");
@@ -34,5 +33,5 @@ export function displayProjects(projects = state.getProjects()){
         figcaptionElement.innerText = project.title;
         figureElement.append(imageElement, figcaptionElement);
         gallery.append(figureElement);
-    }
+    });
 }

@@ -75,8 +75,7 @@ export function initializeModal(){
 export function displayProjectsInModal(){
     const modalGallery = document.querySelector(".modal-content-images");
     modalGallery.innerHTML = "";
-    for (let i = 0; i < state.getProjects().length; i++) {
-        const project = state.getProjects()[i];
+    state.getProjects().forEach((project) => {
         const projectElement = document.createElement("div");
         projectElement.classList.add('modal-content-project');
         const imageElement = document.createElement("img");
@@ -89,7 +88,7 @@ export function displayProjectsInModal(){
         });
         projectElement.append(imageElement, deleteBtn);
         modalGallery.append(projectElement);
-    }
+    });
 }
 
 /**
@@ -146,14 +145,13 @@ export function modalCreateForm(){
 export function modalDisplayCategories() {
     const selectInput = document.querySelector("#categorie");
     selectInput.innerHTML = "";
-    
-    for (let i = 0; i < state.getCategories().length; i++) {
-        const categorie = state.getCategories()[i];
+
+    state.getCategories().forEach((categorie) =>{
         const optionElement = document.createElement("option");
         optionElement.innerText = categorie.name;
         optionElement.value = categorie.id;
         selectInput.append(optionElement);
-    }
+    });
 
     const optionElement = document.createElement("option");
     optionElement.innerText = "";

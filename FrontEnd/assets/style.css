@@ -198,6 +198,7 @@ nav li.nav-bold{
 	font-size: 16px;
 	font-weight: 700;
 	text-align: center;
+	background-color: transparent;
 	border: 1px #1D6154 solid;
 	border-radius: 60px;
 	padding: 9px 0 9px 0;

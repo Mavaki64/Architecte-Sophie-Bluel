@@ -15,21 +15,21 @@ export async function fetchCategories() {
 export function displayCategories() {
 	const filtersContainer = document.querySelector(".filter");
 	filtersContainer.innerHTML = "";
-	for (let i = 0; i < state.getCategories().length; i++) {
-		const filter = state.getCategories()[i];
-		const filterElement = document.createElement("a");
-		filterElement.href = "#";
+
+	state.getCategories().forEach((filter) => {
+		const filterElement = document.createElement("button");
+		filterElement.type = "button";
 		filterElement.innerText = filter.name;
 		filterElement.classList = "filter-item";
 		filterElement.dataset.filterId = filter.id;
 		filtersContainer.append(filterElement);
-	}
+	});
 
-	const filterElement = document.createElement("a");
-	filterElement.href = "#";
+	const filterElement = document.createElement("button");
+	filterElement.type = "button";
 	filterElement.innerText = "Tous";
 	filterElement.classList = "filter-item active";
-	filterElement.dataset.filterId = 0;
+	filterElement.dataset.filterId = "0";
 	filtersContainer.prepend(filterElement);
 }
 
