@@ -1,29 +1,22 @@
+import { categoriesRequest } from "./api.js";
+import * as state from "./state.js";
+
 /**
  * Récupère les catégories depuis l'API
- * @param {string} apiBaseUrl - L'URL de l'API
  * @returns {Promise<Array<Object>>} Un tableau d'objets représentant les catégories
  */
-export async function getCategories(apiBaseUrl) {
-    if (!apiBaseUrl){
-        throw new Error(`Aucune URL n'a été fournie pour fetch les données.`);
-    }
-    const response = await fetch(`${apiBaseUrl}categories`);
-    if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-    }
-    const categories = await response.json();
-    return categories;
+export async function fetchCategories() {
+    state.setCategories(await categoriesRequest());
 }
 
 /**
  * Affiche les catégories dans le filtre en créant les éléments HTML
- * @param {Array<Object>} categories - Un tableau d'objets représentant les catégories à afficher
  */
-export function displayCategories(categories) {
+export function displayCategories() {
     const filtersContainer = document.querySelector(".filter");
     filtersContainer.innerHTML = "";
-    for (let i = 0; i < categories.length; i++) {
-        const filter = categories[i];
+    for (let i = 0; i < state.getCategories().length; i++) {
+        const filter = state.getCategories()[i];
         const filterElement = document.createElement("a");
         filterElement.href = "#";
         filterElement.innerText = filter.name;
@@ -43,10 +36,9 @@ export function displayCategories(categories) {
 /**
  * Filtre les projets par catégorie
  * @param {Object} clickedBtn - L'élément HTML du bouton cliqué
- * @param {Array<Object>} projects - Un tableau d'objets représentant les projets
  * @returns {Array<Object>} Un tableau d'objets représentant les projets filtrés ou tous les projets si la catégorie est 0
  */
-export function filterByCategory(clickedBtn, projects) {
+    export function filterByCategory(clickedBtn) {
     const filterElement = document.querySelectorAll(".filter-item");
     filterElement.forEach(element => {
         element.classList.remove("active");
@@ -55,10 +47,10 @@ export function filterByCategory(clickedBtn, projects) {
     const categoryId = clickedBtn.dataset.filterId;
 
     if(categoryId == 0){
-        return projects;
+        return state.getProjects();
     }
     else{
-        const filteredProjects = projects.filter((project) => project.categoryId == categoryId);
+        const filteredProjects = state.getProjects().filter((project) => project.categoryId == categoryId);
         return filteredProjects;
     }
 }

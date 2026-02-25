@@ -1,14 +1,14 @@
 import { displayCategories } from "./filters.js";
-import { getProjects, displayProjects } from "./works.js";
-import { apiBaseUrl } from "./config.js";
+import { displayProjects } from "./works.js";
+import { deleteProjectRequest, publishProjectRequest } from "./api.js";
+import { isLogged } from "./auth.js";
+import * as state from "./state.js";
 
 /**
  * Toggle les éléments pour l'utilisateur connecté ou non
- * @param {boolean} isLogged - True si l'utilisateur est connecté, false sinon
- * @param {Array<Object>} categories - les catégories
  */
-export function toggleElementForLoggedUser(isLogged, categories){
-    if(isLogged){
+export function toggleElementForLoggedUser(){
+    if(isLogged()){
         document.body.style.paddingTop = `59px`;
         createEditBar();
         const filtersContainer = document.querySelector(".filter");
@@ -24,7 +24,7 @@ export function toggleElementForLoggedUser(isLogged, categories){
         if(editBtn){
             editBtn.remove();
         }
-        displayCategories(categories);
+        displayCategories();
     }
 }
 
@@ -56,23 +56,6 @@ export function createEditBtn(){
     editBtn.prepend(editBtnIcon);
 }
 
-/**
- * Vérifie si l'utilisateur est connecté
- * @returns {boolean} True si l'utilisateur est connecté, false sinon
- */
-export function isLogged(){
-    const user_id = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-    let isLogged;
-    if(user_id != null && token != null){
-        isLogged = true;
-        return isLogged;
-    } else {
-        isLogged = false;
-        return isLogged
-    }
-}
-
 export function initializeModal(){
     const modal = document.querySelector("#modal");
     modal.innerHTML = "";
@@ -88,13 +71,12 @@ export function initializeModal(){
 
 /**
  * Affiche les projets dans le modal
- * @param {Array<Object>} projects - les projets
  */
-export function displayProjectsInModal(projects){
+export function displayProjectsInModal(){
     const modalGallery = document.querySelector(".modal-content-images");
     modalGallery.innerHTML = "";
-    for (let i = 0; i < projects.length; i++) {
-        const project = projects[i];
+    for (let i = 0; i < state.getProjects().length; i++) {
+        const project = state.getProjects()[i];
         const projectElement = document.createElement("div");
         projectElement.classList.add('modal-content-project');
         const imageElement = document.createElement("img");
@@ -115,16 +97,11 @@ export function displayProjectsInModal(projects){
  * @param {integer} id - L'ID du projet
  */
 export async function deleteProject(id){
-    const response = await fetch(`http://localhost:5678/api/works/${id}`, {
-        method: "DELETE",
-        headers: {
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
-        }
-    });
+    const response = await deleteProjectRequest(id);
     if(response.ok){
-        const projects = await getProjects(apiBaseUrl);
-        displayProjects(projects);
-        displayProjectsInModal(projects);
+        state.setProjects(state.getProjects().filter((project) => project.id !== id));
+        displayProjects();
+        displayProjectsInModal();
     }
 }
 
@@ -134,44 +111,44 @@ export async function deleteProject(id){
 export function modalCreateForm(){
     const modalContent = document.querySelector(".modal-content");
     modalContent.innerHTML = `<i class="fa-solid fa-xmark fa-2x modal-close-btn"></i>
-			<i class="fa-solid fa-arrow-left fa-2x modal-back-btn"></i>
-			<h3>Ajout photo</h3>
-			<form action="#" class="add-picture-form">
-				<div class="file-input-container">
-					<i class="fa-regular fa-image fa-6x"></i>
-					<button><input type="file" name="image" id="photo" required><label for="photo">+ Ajouter
-							photo</label></button>
-					<span>jpg, png : 4mo max</span>
+		<i class="fa-solid fa-arrow-left fa-2x modal-back-btn"></i>
+		<h3>Ajout photo</h3>
+		<form action="#" class="add-picture-form">
+			<div class="file-input-container">
+				<i class="fa-regular fa-image fa-6x"></i>
+				<button><input type="file" name="image" id="photo" required><label for="photo">+ Ajouter
+						photo</label></button>
+				<span>jpg, png : 4mo max</span>
+			</div>
+			<div class="form-text-input">
+				<div class="input-container">
+					<label for="titre">Titre</label>
+					<input type="text" name="title" id="titre" required>
 				</div>
-				<div class="form-text-input">
-					<div class="input-container">
-						<label for="titre">Titre</label>
-						<input type="text" name="title" id="titre" required>
-					</div>
-					<div class="input-container">
-						<label for="categorie">Catégorie</label>
-                        <div class="select-container">
-                            <i class="fa-solid fa-chevron-down"></i>
-						    <select name="category" id="categorie" required>
-                            </select>
-                        </div>
-					</div>
-                </div>
-				<hr>
-				<input type="submit" value="Valider" class="disabled-btn" disabled>
-			</form>`;
+				<div class="input-container">
+					<label for="categorie">Catégorie</label>
+                    <div class="select-container">
+                        <i class="fa-solid fa-chevron-down"></i>
+					    <select name="category" id="categorie" required>
+                        </select>
+                    </div>
+				</div>
+            </div>
+			<hr>
+			<input type="submit" value="Valider" class="disabled-btn" disabled>
+		</form>`;
+    modalDisplayCategories();
 }
 
 /**
  * Affiche les catégories dans le select
- * @param {Array<Object>} categories - les catégories
  */
-export function modalDisplayCategories(categories) {
+export function modalDisplayCategories() {
     const selectInput = document.querySelector("#categorie");
     selectInput.innerHTML = "";
     
-    for (let i = 0; i < categories.length; i++) {
-        const categorie = categories[i];
+    for (let i = 0; i < state.getCategories().length; i++) {
+        const categorie = state.getCategories()[i];
         const optionElement = document.createElement("option");
         optionElement.innerText = categorie.name;
         optionElement.value = categorie.id;
@@ -220,24 +197,14 @@ export function modalCheckFormValidity() {
 
 /**
  * Publie un nouveau projet via l'API et affiche les projets dans la galerie et le modal
- * @param {string} baseApiUrl - L'URL de l'API
- * @param {Array<Object>} categories - les catégories
  */
-export async function publishNewProject(baseApiUrl, categories){
+export async function publishNewProject(){
     const form = document.querySelector(".add-picture-form");
     const formData = new FormData(form);
-    const response = await fetch(`${baseApiUrl}works`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
-        body: formData
-    });
-    if(response.ok){
-        const projects = await getProjects(baseApiUrl);
-        displayProjects(projects);
+    const response = await publishProjectRequest(formData);
+    if (response.ok){
+        state.setProjects([...state.getProjects(), await response.json()]);
+        displayProjects();
         modalCreateForm();
-        modalDisplayCategories(categories);
-        return projects;
     }
 }

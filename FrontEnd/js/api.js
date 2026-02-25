@@ -1,5 +1,15 @@
 import { apiBaseUrl } from "./config.js";
+import { getToken } from "./auth.js";
 
+/**
+ * Effectue une requête à l'API
+ * @param {string} path - Le chemin de la requête
+ * @param {Object} options - Les options de la requête.
+ * @param {string} options.method - La méthode de la requête par défaut GET
+ * @param {boolean} options.auth - Si la requête nécessite une authentification par défaut false
+ * @param {Object} options.body - Le corps de la requête par défaut null
+ * @returns {Promise<Response>} La réponse de la requête
+ */
 async function request(path, options = {method: "GET", auth: false, body: null}){
     const url = `${apiBaseUrl}${path}`;
     let headers = {};
@@ -38,7 +48,13 @@ async function request(path, options = {method: "GET", auth: false, body: null})
     }
 }
 
-export async function loginApi(email, password){
+/**
+ * Effectue une requête de login à l'API
+ * @param {string} email - L'email de l'utilisateur
+ * @param {string} password - Le mot de passe de l'utilisateur
+ * @returns {Promise<Object>} Les données de l'utilisateur
+ */
+export async function loginRequest(email, password){
     const response = await request("users/login", {
         method: "POST", 
         body: {email, password}
@@ -47,4 +63,51 @@ export async function loginApi(email, password){
         throw new Error("Erreur d'authentification.\nE-mail ou mot de passe incorrect.");
     }
     return response.json();
+}
+
+/**
+ * Effectue une requête de  récupération des projets à l'API
+ * @param {integer} id - L'ID du projet. Si id est null, tout les projets sont récupérés.
+ * @returns {Promise<Object>} Les données du/des projets.
+ */
+export async function projectsRequest(id = null){
+    const response = await request(id != null ? `works/${id}` : "works");
+    
+    return response.json();
+}
+
+/**
+ * Effectue une requête de récupération des catégories à l'API
+ * @returns {Promise<Object>} Les données des catégories.
+ */
+export async function categoriesRequest(){
+    const response = await request("categories");
+    return response.json();
+}
+
+/**
+ * Effectue une requête de suppression d'un projet à l'API
+ * @param {integer} id - L'ID du projet à supprimer
+ * @returns {Promise<Object>} Les données du projet supprimé
+ */
+export async function deleteProjectRequest(id){
+    const response = await request(`works/${id}`, {
+        method: "DELETE",
+        auth: true
+    });
+    return response;
+}
+
+/**
+ * Effectue une requête de publication d'un projet à l'API
+ * @param {Object} project - FormData contenant les données du projet
+ * @returns {Promise<Object>} Les données du projet publié
+ */
+export async function publishProjectRequest(formData){
+    const response = await request("works", {
+        method: "POST",
+        auth: true,
+        body: formData
+    });
+    return response;
 }

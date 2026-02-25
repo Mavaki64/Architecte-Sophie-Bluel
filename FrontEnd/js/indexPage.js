@@ -1,16 +1,14 @@
-import { getProjects, displayProjects } from "./works.js";
-import { displayCategories, getCategories, filterByCategory } from "./filters.js";
+import { fetchProjects, displayProjects } from "./works.js";
+import { displayCategories, fetchCategories, filterByCategory } from "./filters.js";
 import { logout, toggleLoginButton, checkSessionExpiry } from "./auth.js";
-import { toggleElementForLoggedUser, isLogged, initializeModal, displayProjectsInModal, modalCreateForm, modalDisplayCategories, modalDisplayPictureFromInput, modalCheckFormValidity, publishNewProject } from "./edit.js";
-import { apiBaseUrl } from "./config.js";
+import { toggleElementForLoggedUser, initializeModal, displayProjectsInModal, modalCreateForm, modalDisplayCategories, modalDisplayPictureFromInput, modalCheckFormValidity, publishNewProject } from "./edit.js";
 import { initNavLinks } from "./nav.js";
+import * as state from "./state.js";
 
 const filterContainer = document.querySelector(".filter");
 const loginBtn = document.querySelector(".login");
 const portfolioHeader = document.querySelector(".portfolio-header");
 const modal = document.querySelector("#modal");
-let projects;
-let categories;
 
 /**
  * Charge les projets et les catégories et affiche les projets et les catégories
@@ -18,13 +16,13 @@ let categories;
  * Fait défiler la page jusqu'à la section cible
  */
 document.addEventListener('DOMContentLoaded', async () => {
-    projects = await getProjects(apiBaseUrl);
-    categories = await getCategories(apiBaseUrl);
-    const userIsLogged = isLogged();
-    displayProjects(projects);
-    displayCategories(categories);
+    await fetchProjects();
+    await fetchCategories();
+    displayProjects();
+    displayCategories();
+
     toggleLoginButton(loginBtn);
-    toggleElementForLoggedUser(userIsLogged, categories);
+    toggleElementForLoggedUser();
     initNavLinks({ setActiveLink: true });
     scrollToSection();
     checkSessionExpiry();
@@ -42,7 +40,7 @@ filterContainer.addEventListener('click', (event) => {
     else if(event.target.classList.contains("filter-item")){
         event.preventDefault();
         const clickedBtn = event.target;
-        const filteredProjects = filterByCategory(clickedBtn, projects);
+        const filteredProjects = filterByCategory(clickedBtn);
         displayProjects(filteredProjects);
     }
 });
@@ -57,9 +55,7 @@ loginBtn.addEventListener('click', async () => {
     } else {
         logout();
         toggleLoginButton(loginBtn);
-        categories = await getCategories(apiBaseUrl);
-        const userIsLogged = isLogged();
-        toggleElementForLoggedUser(userIsLogged, categories);
+        toggleElementForLoggedUser();
     }
 });
 
@@ -70,9 +66,8 @@ loginBtn.addEventListener('click', async () => {
 portfolioHeader.addEventListener("click", async (event) => {
     if(event.target.closest(".edit-btn") || event.target.closest(".edit-btn i")) {
         const modal = document.querySelector("#modal");
-        const projects = await getProjects(apiBaseUrl);
         initializeModal();
-        displayProjectsInModal(projects);
+        displayProjectsInModal();
         modal.showModal();
     }
 });
@@ -107,19 +102,15 @@ modal.addEventListener('click', async (event) => {
     }
     else if(event.target === modalBackBtn) {
         initializeModal();
-        const projects = await getProjects(apiBaseUrl);
-        displayProjectsInModal(projects);
+        displayProjectsInModal();
     }
     else if(event.target === modalAddPictureBtn) {
         modalCreateForm();
-        modalDisplayCategories(categories);
+        modalDisplayCategories();
     }
     else if(event.target === submitBtn){
         event.preventDefault();
-        const updatedProjects = await publishNewProject(apiBaseUrl, categories);
-        if(updatedProjects) {
-            projects = updatedProjects;
-        }
+        await publishNewProject();
     }
 });
 
@@ -143,7 +134,7 @@ modal.addEventListener("input", (event) => {
     const categorieInput = document.querySelector("#categorie");
     const fileInput = document.querySelector("#photo");
     if(event.target === titleInput || event.target === categorieInput || event.target === fileInput) {
-        if(fileInput.files[0].type === "image/jpeg" || fileInput.files[0].type === "image/png") {
+        if(fileInput.files[0]?.type === "image/jpeg" || fileInput.files[0]?.type === "image/png") {
             if(fileInput.size < 4 * 1024 * 1024) {
                 modalCheckFormValidity();
             }
@@ -156,7 +147,7 @@ modal.addEventListener("input", (event) => {
  */
 function scrollToSection(){
     const targetSection = window.location.hash;
-    if(targetSection && targetSection.lenght > 0){
+    if(targetSection && targetSection.length > 0){
         const targetSectionElement = document.querySelector(targetSection);
         if(targetSectionElement){
             setTimeout(() => {

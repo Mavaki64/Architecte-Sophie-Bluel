@@ -1,4 +1,4 @@
-import { loginApi } from "./api.js";
+import { loginRequest } from "./api.js";
 
 /**
  * Connecte l'utilisateur et sauvegarde les données d'authentification
@@ -7,7 +7,7 @@ import { loginApi } from "./api.js";
  */
 export async function loginUser(email, password, errorBox){
     try{
-        const loginData = await loginApi(email, password);
+        const loginData = await loginRequest(email, password);
         return loginData;
     } catch(error){
         if (errorBox) {
@@ -49,27 +49,36 @@ export function toggleLoginButton(loginBtn){
     }
 }
 
-export function checkSessionExpiry(){
-    const timeStamp = localStorage.getItem("timeStamp");
-    const user_id = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-    if(user_id && token && timeStamp){
-        const now = Date.now();
-        const sessionAge = now - parseInt(timeStamp);
-        const twentyFourHours = 24 * 60 * 60 * 1000;
-        if(sessionAge > twentyFourHours){
-            logout();
-            window.location.reload();
-        }
-    }
-}
-
-
-/** Nouvelle fonction **/
+/**
+ * Récupère le token d'authentification du localStorage
+ * @returns {string} Le token d'authentification
+ */
 export function getToken(){
     return localStorage.getItem("token");
 }
 
+/**
+ * Vérifie si l'utilisateur est connecté
+ * @returns {boolean} True si l'utilisateur est connecté, false sinon
+ */
 export function isLogged(){
-    return localStorage.getItem("userId") != null && localStorage.getItem("token") != null;
+    return localStorage.getItem("userId") && getToken();
+}
+
+/**
+ * Vérifie si la session est expirée et la déconnecte si c'est le cas
+ */
+export function checkSessionExpiry(){
+    const timeStamp = localStorage.getItem("timeStamp");
+    const user_id = localStorage.getItem("userId");
+    const token = getToken();
+    if(user_id && token && timeStamp){
+        const now = Date.now();
+        const sessionAge = now - parseInt(timeStamp);
+        const SESSION_DURATION_MS = 24 * 60 * 60 * 1000;
+        if(sessionAge > SESSION_DURATION_MS){
+            logout();
+            window.location.reload();
+        }
+    }
 }

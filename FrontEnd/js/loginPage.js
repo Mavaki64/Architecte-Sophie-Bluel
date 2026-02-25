@@ -1,4 +1,4 @@
-import { loginUser, saveAuth, toggleLoginButton } from "./auth.js";
+import { loginUser, saveAuth, toggleLoginButton, isLogged } from "./auth.js";
 import { initNavLinks } from "./nav.js";
 
 const submitBtn = document.querySelector(`input[type="submit"]`)
@@ -10,7 +10,7 @@ const errorBox = document.querySelector(".error-box");
  * Initialise les liens de navigation (dont la mise en avant du lien "login" sur cette page).
  */
 document.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem("userId") != null && window.location.href.includes("/login.html")) {
+    if (isLogged() && window.location.href.includes("/login.html")) {
         window.location = "./index.html";
     }
     initNavLinks();
@@ -41,8 +41,9 @@ submitBtn.addEventListener('click', async (event) => {
 
     const loginData = await loginUser(emailElement.value, passwordElement.value, errorBox);
     if(loginData){
+        console.log(loginData);
         saveAuth(loginData.userId, loginData.token);
-        toggleLoginButton(document.querySelector(".login"));
         window.location = './index.html';
+        toggleLoginButton(document.querySelector(".login"));
     }
 });
