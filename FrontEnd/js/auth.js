@@ -10,9 +10,7 @@ export async function loginUser(email, password, errorBox){
         const loginData = await loginRequest(email, password);
         return loginData;
     } catch(error){
-        if (errorBox) {
-            errorBox.innerHTML = `<p>${error.message}</p>`;
-        }
+        if (errorBox) errorBox.innerHTML = `<p>${error.message}</p>`;
         return null;
     }
 }
@@ -42,11 +40,7 @@ export function logout(){
  * @param {Element} loginBtn - Le bouton de connexion
  */
 export function toggleLoginButton(loginBtn){
-    if(isLogged()){
-        loginBtn.textContent = "logout";
-    } else {
-        loginBtn.textContent = "login";
-    }
+    loginBtn.textContent = isLogged() ? "logout" : "login";
 }
 
 /**
@@ -70,15 +64,12 @@ export function isLogged(){
  */
 export function checkSessionExpiry(){
     const timeStamp = localStorage.getItem("timeStamp");
-    const user_id = localStorage.getItem("userId");
-    const token = getToken();
-    if(user_id && token && timeStamp){
-        const now = Date.now();
-        const sessionAge = now - parseInt(timeStamp);
-        const SESSION_DURATION_MS = 24 * 60 * 60 * 1000;
-        if(sessionAge > SESSION_DURATION_MS){
-            logout();
-            window.location.reload();
-        }
+    if(!localStorage.getItem("userId") || !getToken() || !timeStamp) return;
+
+    const sessionAge = Date.now() - parseInt(timeStamp);
+    const SESSION_DURATION_MS = 24 * 60 * 60 * 1000;
+    if(sessionAge > SESSION_DURATION_MS){
+        logout();
+        window.location.reload();
     }
 }

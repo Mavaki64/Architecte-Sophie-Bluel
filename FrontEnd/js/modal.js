@@ -67,6 +67,7 @@ export function initializeModal(){
 			<hr>
 			<button class="modal-content-button" data-action="showAddForm">Ajouter une photo</button>
 		</div>`;
+    displayProjectsInModal();
 }
 
 /**

@@ -39,10 +39,7 @@ export function displayCategories() {
  * @returns {Array<Object>} Un tableau d'objets représentant les projets filtrés ou tous les projets si la catégorie est 0
  */
 export function filterByCategory(clickedBtn) {
-	const filterElement = document.querySelectorAll(".filter-item");
-	filterElement.forEach((element) => {
-		element.classList.remove("active");
-	});
+	document.querySelectorAll(".filter-item").forEach((element) => element.classList.remove("active"));
 	clickedBtn.classList.add("active");
 	const categoryId = clickedBtn.dataset.filterId;
 

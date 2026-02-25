@@ -1,9 +1,8 @@
 import { fetchProjects, displayProjects } from "./works.js";
 import { displayCategories, fetchCategories, filterByCategory } from "./filters.js";
 import { logout, toggleLoginButton, checkSessionExpiry } from "./auth.js";
-import { toggleElementForLoggedUser, initializeModal, displayProjectsInModal, modalCreateForm, modalDisplayCategories, modalDisplayPictureFromInput, modalCheckFormValidity, publishNewProject } from "./modal.js";
+import { toggleElementForLoggedUser, initializeModal, displayProjectsInModal, modalCreateForm, modalDisplayPictureFromInput, modalCheckFormValidity, publishNewProject } from "./modal.js";
 import { initNavLinks } from "./nav.js";
-import * as state from "./state.js";
 
 const filterContainer = document.querySelector(".filter");
 const loginBtn = document.querySelector(".login");
@@ -20,10 +19,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     await fetchCategories();
     displayProjects();
     displayCategories();
-
-    toggleLoginButton(loginBtn);
     toggleElementForLoggedUser();
-    initNavLinks({ setActiveLink: true });
+    initNavLinks({ 
+        setActiveLink: true,
+        onLogout: () => {
+            logout();
+            toggleLoginButton(loginBtn);
+            toggleElementForLoggedUser();
+        }
+    });
     scrollToSection();
     checkSessionExpiry();
     setInterval(checkSessionExpiry, 60000);
@@ -34,29 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
  * @param {Event} event - Événement de clic
  */
 filterContainer.addEventListener('click', (event) => {
-    if(event.target.classList.contains("filter-item active")){
-        event.preventDefault();
-    }
-    else if(event.target.classList.contains("filter-item")){
-        event.preventDefault();
-        const clickedBtn = event.target;
-        const filteredProjects = filterByCategory(clickedBtn);
-        displayProjects(filteredProjects);
-    }
-});
-
-/**
- * Gère le clic sur le bouton de connexion et redirige vers la page de connexion si l'utilisateur n'est pas connecté
- * @param {Event} event - Événement de clic
- */
-loginBtn.addEventListener('click', async () => {
-    if (loginBtn.textContent.includes("login")) {
-        window.location = "./login.html"
-    } else {
-        logout();
-        toggleLoginButton(loginBtn);
-        toggleElementForLoggedUser();
-    }
+    if(event.target.classList.contains("filter-item")) displayProjects(filterByCategory(event.target));
 });
 
 /**
@@ -64,10 +46,8 @@ loginBtn.addEventListener('click', async () => {
  * @param {Event} event - L'événement de clic
  */
 portfolioHeader.addEventListener("click", async (event) => {
-    if(event.target.closest(".edit-btn") || event.target.closest(".edit-btn i")) {
-        const modal = document.querySelector("#modal");
+    if(event.target.closest(".edit-btn")) {
         initializeModal();
-        displayProjectsInModal();
         modal.showModal();
     }
 });
@@ -89,10 +69,9 @@ modal.addEventListener('click', async (event) => {
         modal.close();
         return;
     }
-    const action = event.target.closest("[data-action]").dataset.action;
-    if (action && modalActions[action]) {
-        await modalActions[action](event);
-    }
+    const action = event.target.closest("[data-action]")?.dataset.action;
+    if (action && modalActions[action]) await modalActions[action](event);
+    
 });
 
 /**
@@ -100,10 +79,7 @@ modal.addEventListener('click', async (event) => {
  * @param {Event} event - L'événement de changement
  */
 modal.addEventListener("change", (event) => {
-    const fileInput = document.querySelector("#photo");
-    if(event.target === fileInput) {
-        modalDisplayPictureFromInput(event.target.files[0]);
-    }
+    if (event.target.id === "photo") modalDisplayPictureFromInput(event.target.files[0]);
 });
 
 /**
@@ -114,13 +90,12 @@ modal.addEventListener("input", (event) => {
     const titleInput = document.querySelector("#titre");
     const categorieInput = document.querySelector("#categorie");
     const fileInput = document.querySelector("#photo");
-    if(event.target === titleInput || event.target === categorieInput || event.target === fileInput) {
-        if(fileInput.files[0]?.type === "image/jpeg" || fileInput.files[0]?.type === "image/png") {
-            if(fileInput.size < 4 * 1024 * 1024) {
-                modalCheckFormValidity();
-            }
-        }
-    }
+    if(
+        (event.target === titleInput || event.target === categorieInput || event.target === fileInput) &&
+        (fileInput.files[0]?.type === "image/jpeg" || fileInput.files[0]?.type === "image/png") &&
+        fileInput.files[0].size < 4 * 1024 * 1024
+    ) modalCheckFormValidity();
+    
 });
 
 /**
@@ -128,12 +103,5 @@ modal.addEventListener("input", (event) => {
  */
 function scrollToSection(){
     const targetSection = window.location.hash;
-    if(targetSection && targetSection.length > 0){
-        const targetSectionElement = document.querySelector(targetSection);
-        if(targetSectionElement){
-            setTimeout(() => {
-                targetSectionElement.scrollIntoView({ behavior: 'smooth' });
-            }, 50);
-        }
-    }
+    if(targetSection) document.querySelector(targetSection)?.scrollIntoView({ behavior: 'smooth' });
 }

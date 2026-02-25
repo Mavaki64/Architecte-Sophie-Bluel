@@ -15,9 +15,8 @@ async function request(path, options = {method: "GET", auth: false, body: null})
     let headers = {};
     if(options.auth){
         const token = getToken();
-        if(!token){
-            throw new Error("Vous n'êtes pas connecté.");
-        }
+        if(!token) throw new Error("Vous n'êtes pas connecté.");
+        
         headers = {
             "Authorization": `Bearer ${token}`
         }
@@ -70,19 +69,16 @@ export async function loginRequest(email, password){
  * @param {integer} id - L'ID du projet. Si id est null, tout les projets sont récupérés.
  * @returns {Promise<Object>} Les données du/des projets.
  */
-export async function projectsRequest(id = null){
-    const response = await request(id != null ? `works/${id}` : "works");
-    
-    return response.json();
+export function projectsRequest(id = null){
+    return request(id != null ? `works/${id}` : "works").then(response => response.json());
 }
 
 /**
  * Effectue une requête de récupération des catégories à l'API
  * @returns {Promise<Object>} Les données des catégories.
  */
-export async function categoriesRequest(){
-    const response = await request("categories");
-    return response.json();
+export function categoriesRequest(){
+    return request("categories").then(response => response.json());
 }
 
 /**
