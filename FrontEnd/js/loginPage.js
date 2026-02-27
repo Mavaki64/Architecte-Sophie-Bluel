@@ -1,4 +1,4 @@
-import { loginUser, saveAuth, toggleLoginButton, isLogged } from "./auth.js";
+import { loginUser, saveAuth, isLogged } from "./auth.js";
 import { initNavLinks } from "./nav.js";
 
 const submitBtn = document.querySelector(`input[type="submit"]`)

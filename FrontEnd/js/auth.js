@@ -22,7 +22,7 @@ export async function loginUser(email, password, errorBox){
  */
 export function saveAuth(userId, token){
     localStorage.setItem("userId", userId);
-    localStorage.setItem("token", token)
+    localStorage.setItem("token", token);
     localStorage.setItem("timeStamp", Date.now());
 }
 

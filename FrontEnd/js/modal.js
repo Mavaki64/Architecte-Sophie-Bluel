@@ -50,7 +50,6 @@ export function createEditBtn(){
 
 export function initializeModal(){
     const modal = document.querySelector("#modal");
-    modal.innerHTML = "";
     modal.innerHTML = `<div class="modal-content">
 			<i class="fa-solid fa-xmark fa-2x modal-close-btn" data-action="close"></i>
 			<h3>Galerie photo</h3>

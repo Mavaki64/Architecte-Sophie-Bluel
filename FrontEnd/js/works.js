@@ -2,20 +2,11 @@ import { projectsRequest } from "./api.js";
 import * as state from "./state.js";
 
 /**
-* Récupère les travaux depuis l'API
+* Récupère les travaux depuis l'API et met à jour le state
 * @param {integer} id - L'ID du projet
-* @returns {Promise<Array<Object>>} Un tableau d'objets représentant les projets si id est null, sinon un objet représentant le projet
 */
-export async function fetchProjects(id = null) {
-    if(id && !Number.isInteger(id)){
-        throw new Error("L'ID doit être un nombre entier.");
-    }
-
-    if (id){
-        state.setProjects(await projectsRequest(id));
-    } else {
-        state.setProjects(await projectsRequest());
-    }
+export async function fetchProjects() {
+    state.setProjects(await projectsRequest());
 }
 
 /**
