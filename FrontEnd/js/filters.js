@@ -10,7 +10,7 @@ export async function fetchCategories() {
 }
 
 /**
- * Affiche les catégories dans le filtre en créant les éléments HTML
+ * Affiche les catégories dans le container de filtre en créant les éléments HTML
  */
 export function displayCategories() {
 	const filtersContainer = document.querySelector(".filter");

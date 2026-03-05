@@ -64,7 +64,7 @@ export function isLogged(){
  */
 export function checkSessionExpiry(){
     const timeStamp = localStorage.getItem("timeStamp");
-    if(!localStorage.getItem("userId") || !getToken() || !timeStamp) return;
+    if(!isLogged()|| !timeStamp) return;
 
     const sessionAge = Date.now() - parseInt(timeStamp);
     const SESSION_DURATION_MS = 24 * 60 * 60 * 1000;
